@@ -59,13 +59,13 @@ It seems like occasionally JSON data returned form this API will not match what 
 ###Grading:
 
 1. Functionality(60%):
-- Correctly view GPS data and trigger event when within specific location range (15%)
-- Upload/download to a class SQL database (15%)
-- Display video from S3 (15%)
-- Successfully take picture, upload image to S3(15%)
+  - Correctly view GPS data and trigger event when within specific location range (15%)
+  - Upload/download to a class SQL database (15%)
+  - Display video from S3 (15%)
+  - Successfully take picture, upload image to S3(15%)
 2. Code Quality(20%):
-- Android guidelines (10%)
-- Java best practices/ general MVC guidelines/ comments (10%)
+  - Android guidelines (10%)
+  - Java best practices/ general MVC guidelines/ comments (10%)
 3. Division of workload (10%)
 4. Effective and intuitive user interface (10%)
 
