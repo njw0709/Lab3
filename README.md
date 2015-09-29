@@ -43,21 +43,22 @@ You need to meet the following goals by the following dates:
 Since this lab is longer we will give you some guidance on implementation:
 
 - We expect you to separate the functionalities logically into separate classes. 
+
+####Using the database
+- In the table [such-and-such] in the database at the IP address [PUT_IP_HERE], each row should contain columns name [XXandYY] which are the latitude, longitude, and unique identifier of the video that is the clue to that location. 
+- WRITE THINGS HERE ABOUT WEB+SQL
+
+####Video download
 - You should use a VideoView to view the video. See documentation here: http://developer.android.com/reference/android/widget/VideoView.html
+
+####Image upload
+- We're using the Android S3 SDK. A super-relevant code example can be found here: https://github.com/aws/aws-sdk-android.  You can include the SDK in gradle with the line `compile 'com.amazonaws:aws-java-sdk:1.10.0'`
+
+####Device hardware
 - Information about sensor data can be found here: https://developer.android.com/guide/topics/sensors/index.html
 - Information about the camera can be found here: http://developer.android.com/guide/topics/media/camera.html
-- CHRIS WRITE THINGS HERE ABOUT WEB+SQL
 
 *Note: we're intentionally giving you less information. You should be adept at googling issues and finding documentation for classes on your own.*
-
-####Saving data
-
-While it is possible to save the necessary data here in SharedPreferences, we want you to set up the local SQL database on your phone. 
-This link provides a very good guide: http://developer.android.com/training/basics/data-storage/databases.html.
-
-It is likely you do not want to save the actual image to the database. Find something that can be used to load the image instead. 
-
-It seems like occasionally JSON data returned form this API will not match what you expect, you should figure out how to smoothly handle this without crashing your application.
 
 ###Grading:
 
