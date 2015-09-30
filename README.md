@@ -45,8 +45,12 @@ Since this lab is longer we will give you some guidance on implementation:
 - We expect you to separate the functionalities logically into separate classes. 
 
 ####Using the database
-- In the table [such-and-such] in the database at the IP address [PUT_IP_HERE], each row should contain columns name [XXandYY] which are the latitude, longitude, and unique identifier of the video that is the clue to that location. 
-- WRITE THINGS HERE ABOUT WEB+SQL
+- We have created a database on a web server that everyone can connect to. This database will contain a table that holds the UUID of the video, the latitude, longitude and clue id. This table is called SCAVENGER\_INFO and contains the columns LOCATION\_ID, LATITUDE, LONGITUDE, and VIDEO_ID. These should be pretty straight forward as to what they contain. **DO NOT ADD OR DELETE INFORMATION FROM THIS TABLE**
+- You will also create your own table that should contain atleast columns for the UUID of the photo you upload to S3 and also the ID of the location the photo was uploaded at. Please name this table something identifiable, ie CHRIS_PHOTOS
+- Speaking of UUID, heres a description http://www.tutorialspoint.com/java/util/uuid_randomuuid.htm you should give each of your photos a UUID and store them in S3 using that UUID.
+- To log into the database: Its IP is 45.55.65.113, you can use the default port name. The database name is mobproto. Your username is student and your password is MobProto.
+- This [tutorial](http://www.tutorialspoint.com/jdbc/jdbc-db-connections.htm) gives you a good way to get a Connection to a SQL database. The URL that is referenced in this tutorial would look like jdbc:mysql://45.55.65.113/mobproto
+- Once you have a connection, you should be using a PreparedStatement to run your SQL queries. [This](http://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/) shows a decent example of doing that. 
 
 ####Video download
 - You should use a VideoView to view the video. See documentation here: http://developer.android.com/reference/android/widget/VideoView.html
