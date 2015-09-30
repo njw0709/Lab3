@@ -28,6 +28,7 @@ To accomplish these goals you will have to learn, use or improve:
 
 ###App functionalities
 - Correctly view GPS data and trigger event when within specific location range
+  - Protip: You can follow this link to mock your location so you don't have to run around everywhere. http://www.phonearena.com/news/Heres-how-to-easily-fake-your-GPS-location-on-Android_id62775 or if on an emulator http://stackoverflow.com/questions/2279647/how-to-emulate-gps-location-in-the-android-emulator
 - Upload/download to/from a class SQL database
 - Display video from S3 bucket
 - Take picture, upload image to S3
