@@ -52,6 +52,12 @@ Since this lab is longer we will give you some guidance on implementation:
 - To log into the database: Its IP is 45.55.65.113, you can use the default port name. The database name is mobproto. Your username is student and your password is MobProto.
 - This [tutorial](http://www.tutorialspoint.com/jdbc/jdbc-db-connections.htm) gives you a good way to get a Connection to a SQL database. The URL that is referenced in this tutorial would look like jdbc:mysql://45.55.65.113/mobproto
 - Once you have a connection, you should be using a PreparedStatement to run your SQL queries. [This](http://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/) shows a decent example of doing that. 
+- 
+####Using S3
+- The s3 bucket name you will be using is olin-mobile-proto.
+- The API key will be emailed to you.
+- You must get the S3 URL of the videos in order to easily play the video in a VideoView
+- upload your images with a UUID.
 
 ####Video download
 - You should use a VideoView to view the video. See documentation here: http://developer.android.com/reference/android/widget/VideoView.html
