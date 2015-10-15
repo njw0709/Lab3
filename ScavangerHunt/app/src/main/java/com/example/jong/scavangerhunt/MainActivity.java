@@ -1,17 +1,32 @@
 package com.example.jong.scavangerhunt;
 
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends FragmentActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+    Fragment Tabbedfrag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Tabbedfrag = new TabbedFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.Frag_layout, Tabbedfrag, Tabbedfrag.getTag());
+        ft.addToBackStack(null);
+        ft.commit();
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
