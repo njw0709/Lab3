@@ -1,6 +1,7 @@
 package com.example.jong.scavangerhunt;
 
 import android.app.Fragment;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -12,7 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -23,10 +25,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class NavDrawer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+        implements NavigationView.OnNavigationItemSelectedListener,
+                    OnMapReadyCallback,
+                    GoogleApiClient.ConnectionCallbacks {
 
     static final LatLng TutorialsPoint = new LatLng(21 , 57);
     private GoogleMap googleMap;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,7 @@ public class NavDrawer extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Test button
         final Button myButton2 = (Button) findViewById(R.id.button);
         myButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,35 +50,17 @@ public class NavDrawer extends AppCompatActivity
             }
         });
 
+        // Setup Google API Client, add location services
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
         // Google Maps stuff
-//        try {
-//            if (googleMap == null) {
-////                googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-//                googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-//            }
-//            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-//            Marker TP = googleMap.addMarker(new MarkerOptions().
-//                    position(TutorialsPoint).title("TutorialsPoint"));
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-
-
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -86,15 +75,32 @@ public class NavDrawer extends AppCompatActivity
     public void onMapReady(GoogleMap mMap) {
         googleMap = mMap;
 
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
-        // Add a marker in Olin and move the camera
-        LatLng olin = new LatLng(42.293194444444445, -71.26316666666666);
+        LatLng olin = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         googleMap.addMarker(new MarkerOptions().position(olin).title("This is Olin"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(olin));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14));
+
+        // Add a marker in Olin and move the camera
+//        LatLng olin = new LatLng(42.293194444444445, -71.26316666666666);
+//        googleMap.addMarker(new MarkerOptions().position(olin).title("This is Olin"));
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(olin));
+//        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14));
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+//            mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
+//            mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int var1) {
+
     }
 
     @Override
