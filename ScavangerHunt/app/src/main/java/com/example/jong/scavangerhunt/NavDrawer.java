@@ -61,13 +61,7 @@ public class NavDrawer extends AppCompatActivity
         mapFragment.getMapAsync(this);
 
 
-        // Add a marker in Olin and move the camera
-//        LatLng olin = new LatLng(42.293194444444445, -71.26316666666666);
-        // Wait for map to not be null
-//        while (googleMap == null){}
-//        LatLng olin = new LatLng(42, -71);
-//        googleMap.addMarker(new MarkerOptions().position(olin).title("This is Olin"));
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(olin));
+
 
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -92,10 +86,15 @@ public class NavDrawer extends AppCompatActivity
     public void onMapReady(GoogleMap mMap) {
         googleMap = mMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        // Add a marker in Sydney and move the camera
+//        LatLng sydney = new LatLng(-34, 151);
+//        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        // Add a marker in Olin and move the camera
+        LatLng olin = new LatLng(42.293194444444445, -71.26316666666666);
+        googleMap.addMarker(new MarkerOptions().position(olin).title("This is Olin"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(olin));
     }
 
     @Override
