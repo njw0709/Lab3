@@ -18,7 +18,7 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Tabbedfrag = new TabbedFragment();
+//        Tabbedfrag = new TabbedFragment();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.Frag_layout, Tabbedfrag, Tabbedfrag.getTag());
