@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity
         fragment = new TabbedFragment();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.Frag_layout, Tabbedfrag, Tabbedfrag.getTag());
+        ft.replace(R.id.Frag_layout, Tabbedfrag, Tabbedfrag.getTag());//addtobackstack
+        //commit();
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity
             //implement what happens when item is clicked
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+        //TODO:rename the variable
         stage = 2;
         String[] Stage_list= new String[stage];
         for (int i=1; i<=stage; i++) {

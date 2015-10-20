@@ -52,8 +52,8 @@ public class TabbedFragment extends android.support.v4.app.Fragment {
         return v;
 
     }
-
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+     //TODO: make a separate file for sections pager adapter
+     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -98,7 +98,7 @@ public class TabbedFragment extends android.support.v4.app.Fragment {
             return null;
         }
     }
-
+  //TODO: separate class - no static
     public static class TabbedFragment_clip extends android.support.v4.app.Fragment {
 
         public static final String ARG_SECTION_NUMBER = "1";
@@ -113,18 +113,11 @@ public class TabbedFragment extends android.support.v4.app.Fragment {
 
         public void create_button(View v, String button){
             switch(button){
+                //TODO:button name change to small case
                 case("camera"):{
                     Button Camera = null;
                     Camera.setEnabled(hasarrived);
                     Camera = (Button) v.findViewById(R.id.Camera_button);
-                    Camera.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            /**Camera Functionality**/
-                            Log.d("Camera", "Camera open");
-                        }
-                    });
                 }
             }
 
@@ -142,16 +135,16 @@ public class TabbedFragment extends android.support.v4.app.Fragment {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (mProgressStatus<100) {
-                        mProgressStatus= doWork();
+                while (mProgressStatus<100) {
+                    mProgressStatus= doWork();
 
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mProgress.setProgress(mProgressStatus);
-                            }
-                        });
-                    }
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mProgress.setProgress(mProgressStatus);
+                        }
+                    });
+                }
                 }
             });
         }
@@ -164,6 +157,7 @@ public class TabbedFragment extends android.support.v4.app.Fragment {
             if (mediaControls==null) {
                 mediaControls = new MediaController(getActivity());
             }
+            //TODO:pass media controller of the videoview
             mediaControls.setMediaPlayer(mVideoView);
 //            progressDialog = new ProgressDialog(getActivity());
 //            progressDialog.setTitle("Scavanger Hunt Clue Video");
@@ -207,7 +201,7 @@ public class TabbedFragment extends android.support.v4.app.Fragment {
         }
 
     }
-
+    //TODO:separate to another class
     public static class TabbedFragment_map extends android.support.v4.app.Fragment {
         public static final String ARG_SECTION_NUMBER = "2";
         public TabbedFragment_map() {
