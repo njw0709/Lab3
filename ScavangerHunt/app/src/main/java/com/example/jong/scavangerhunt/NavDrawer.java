@@ -76,16 +76,16 @@ public class NavDrawer extends AppCompatActivity
         googleMap = mMap;
 
 
-        LatLng olin = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        googleMap.addMarker(new MarkerOptions().position(olin).title("This is Olin"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(olin));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14));
-
-        // Add a marker in Olin and move the camera
-//        LatLng olin = new LatLng(42.293194444444445, -71.26316666666666);
+//        LatLng olin = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 //        googleMap.addMarker(new MarkerOptions().position(olin).title("This is Olin"));
 //        googleMap.moveCamera(CameraUpdateFactory.newLatLng(olin));
 //        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14));
+
+        // Add a marker in Olin and move the camera
+        LatLng olin = new LatLng(42.293194444444445, -71.26316666666666);
+        googleMap.addMarker(new MarkerOptions().position(olin).title("This is Olin"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(olin));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14));
     }
 
     @Override
