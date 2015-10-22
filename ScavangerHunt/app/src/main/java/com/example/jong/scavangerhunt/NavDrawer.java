@@ -1,8 +1,15 @@
 package com.example.jong.scavangerhunt;
 
-import android.app.Fragment;
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +21,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import com.google.android.gms.common.api.GoogleApiClient;
+//import com.google.android.gms.location.LocationListener;
+import android.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,12 +36,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class NavDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                     OnMapReadyCallback,
-                    GoogleApiClient.ConnectionCallbacks {
+                    GoogleApiClient.ConnectionCallbacks,
+                    LocationListener {
 
-    static final LatLng TutorialsPoint = new LatLng(21 , 57);
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+    private LocationManager locationManager;
+    private Location lastLoc;
+    private Boolean mapReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,26 +82,48 @@ public class NavDrawer extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Location Manager stuff
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, (long) 0, (float) 0, this);
+//        if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+//
+//            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},
+//                    this.MY_PERMISSION_ACCESS_COARSE_LOCATION);
+//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            //DO CHECK PERMISSION
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+        }
+        lastLoc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Log.d("LATITUDE", String.valueOf(lastLoc.getLatitude()));
+//        onLocationChanged(lastLoc);
     }
 
     public void onMapReady(GoogleMap mMap) {
+        mapReady = true;
         googleMap = mMap;
+        updateMapWithLocation(lastLoc);
+    }
 
+    private void updateMapWithLocation(Location loc) {
+        if (mapReady) {
+            LatLng locLL = new LatLng(loc.getLatitude(), loc.getLongitude());
 
-//        LatLng olin = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-//        googleMap.addMarker(new MarkerOptions().position(olin).title("This is Olin"));
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(olin));
-//        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14));
-
-        // Add a marker in Olin and move the camera
-        LatLng olin = new LatLng(42.293194444444445, -71.26316666666666);
-        googleMap.addMarker(new MarkerOptions().position(olin).title("This is Olin"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(olin));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14));
+            googleMap.addMarker(new MarkerOptions()
+                    .position(locLL)
+                    .title("Your current location"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(locLL));
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(14));
+        }
     }
 
     @Override
     public void onConnected(Bundle connectionHint) {
+        Log.d("ONCONNECTED","this was called");
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
@@ -101,6 +135,27 @@ public class NavDrawer extends AppCompatActivity
     @Override
     public void onConnectionSuspended(int var1) {
 
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.d("LOCATION CHANGED","it was changed");
+        updateMapWithLocation(location);
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Log.d("Latitude","disable");
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        Log.d("Latitude", "enable");
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        Log.d("Latitude","status");
     }
 
     @Override
