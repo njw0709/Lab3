@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".TabbedActivity$maplayout">
+    android:layout_width="wrap_content" android:layout_height="500dp">
 
     <TextView
         android:layout_width="fill_parent"
@@ -14,45 +11,46 @@
         android:paddingTop="@dimen/start_frag"
         />
     <fragment
-    android:layout_width="fill_parent"
-    android:layout_height="300dp"
-    android:layout_below="@id/stage_text"
-    android:id="@+id/video_view"
-    android:layout_marginTop="@dimen/inbetween"
-    />
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"
+        android:layout_below="@id/stage_text"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_marginTop="@dimen/inbetween"
+        />
 
     <ProgressBar
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    style="?android:attr/progressBarStyleHorizontal"
-    android:layout_below="@id/video_view"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="@dimen/inbetween"
-    android:indeterminate="false"
-    android:max="100"
-    android:minHeight="50dp"
-    android:minWidth="200dp"
-    android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_below="@id/map"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/inbetween"
+        android:indeterminate="false"
+        android:max="100"
+        android:minHeight="50dp"
+        android:minWidth="200dp"
+        android:id="@+id/progressbar"
     />
     <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/progressbar"
-    android:text="Not There Yet!"
-    android:textSize="20dp"
-    android:layout_centerHorizontal="true"
-    android:id="@+id/Stage_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progressbar"
+        android:text="Not There Yet!"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/Stage_status"
     />
 
     <Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:enabled="false"
-    android:layout_below="@id/Stage_status"
-    android:layout_marginTop="20dp"
-    android:layout_centerHorizontal="true"
-    android:text="Camera"
-    android:id="@+id/Camera_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:layout_below="@id/Stage_status"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="Camera"
+        android:id="@+id/Camera_button"
     />
 
 

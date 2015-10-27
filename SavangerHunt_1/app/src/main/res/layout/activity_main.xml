@@ -6,37 +6,40 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true" tools:openDrawer="start">
+    tools:openDrawer="start">
 
-    <include layout="@layout/app_bar_main"
+    <include layout="@layout/app_bar_main" />
+
+
+    <android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_marginTop="55dp"
+        android:id="@+id/pager"
+        >
+        <android.support.v4.view.PagerTitleStrip
+            android:id="@+id/pager_title_strip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="#33b5e5"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:textColor="#fff" />
+    </android.support.v4.view.ViewPager>
 
-    <!--<android.support.design.widget.NavigationView-->
-        <!--android:id="@+id/nav_view"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="start"-->
-        <!--android:fitsSystemWindows="true"-->
-        <!--app:headerLayout="@layout/nav_header_main"-->
-        <!--app:menu="@menu/activity_main_drawer" />-->
+
 
     <ListView
         android:id="@+id/nav_listview"
-        android:layout_width="wrap_content"
+        android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
-        />
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:id="@+id/Frag_layout"
+        android:background="#fff"
         />
 
 </android.support.v4.widget.DrawerLayout>

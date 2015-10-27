@@ -1,11 +1,13 @@
 package com.example.jong.savangerhunt_1;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -28,69 +30,58 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-
-    private void inflate_fragment(Fragment fragment) {
-        fragment = new TabbedFragment();
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.Frag_layout, Tabbedfrag, Tabbedfrag.getTag());//addtobackstack
-        //commit();
-    }
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //implement what happens when item is clicked
-        }
-    }
-
+    private String[] mDrawerItems;
+    SectionsPagerAdapter mSectionsPagerAdapter;
+    ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        inflate_fragment(Tabbedfrag);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
         //TODO:rename the variable
         stage = 2;
         String[] Stage_list= new String[stage];
-        for (int i=1; i<=stage; i++) {
+        for (int i=1; i<stage; i++) {
             Stage_list[i] = "Stage ".concat(Integer.toString(i));
         }
 
-        mTitle = mDrawerTitle = getTitle();
+
         mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerTitle=mTitle=getTitle();
         mDrawerlist = (ListView)  findViewById(R.id.nav_listview);
-        mDrawerlist.setAdapter(new ArrayAdapter<String>(this, R.layout.drawerlistitem, Stage_list));
+        mDrawerItems=Stage_list;
+        mDrawerlist.setAdapter(new ArrayAdapter<String>(this, R.layout.drawerlistitem, mDrawerItems));
         mDrawerlist.setOnItemClickListener(new DrawerItemClickListener());
+
         toggle = new ActionBarDrawerToggle(
                 this, mDrawerlayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
             public void onDrawerClosed(View view){
                 super.onDrawerClosed(view);
-                getActionBar().setTitle(mTitle);
+                getSupportActionBar().setTitle(mTitle);
                 invalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerview){
                 super.onDrawerOpened(drawerview);
-                getActionBar().setTitle(mDrawerTitle);
+                getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu();
             }
         };
 
         mDrawerlayout.setDrawerListener(toggle);
+        if (getSupportActionBar() != null)
+        {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
+
         toggle.syncState();
     }
 
@@ -108,6 +99,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
 
@@ -120,6 +112,10 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (toggle.onOptionsItemSelected(item)){
             return true;
         }
 
@@ -149,5 +145,13 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            //implement what happens when item is clicked
+        }
     }
 }
