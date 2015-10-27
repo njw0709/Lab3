@@ -36,7 +36,13 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         switch (button) {
             //TODO:button name change to small case
             case ("camera"): {
-                Button Camera = (Button) v.findViewById(R.id.Camera_button);
+                Button camera = (Button) v.findViewById(R.id.Camera_button);
+                camera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
             }
         }
 
@@ -91,12 +97,7 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 progressDialog.dismiss();
-                mVideoView.seekTo(videopos);
-                if (videopos==0) {
-                    mVideoView.start();
-                }else {
-                    mVideoView.pause();
-                }
+                mVideoView.start();
             }
         });
     }
@@ -108,6 +109,7 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.cliplayout, container, false);
         create_button(view, "Camera");
         create_progressbar(view);
+        create_videoview(view);
         return view;
     }
 }
