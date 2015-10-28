@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.android.volley.RequestQueue;
@@ -26,7 +27,6 @@ import com.android.volley.toolbox.Volley;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    Fragment Tabbedfrag;
     private int stage;
     private DrawerLayout mDrawerlayout;
     private ListView mDrawerlist;
@@ -34,9 +34,10 @@ public class MainActivity extends AppCompatActivity
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mDrawerItems;
-    SectionsPagerAdapter mSectionsPagerAdapter;
-    ViewPager mViewPager;
-//    final RequestQueue queue = Volley.newRequestQueue(this);
+    private FragmentManager fm;
+    private FragmentTransaction ft;
+    private FrameLayout frame;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +45,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        fm = getSupportFragmentManager();
+
 
         //TODO:rename the variable
         stage = 2;
@@ -62,6 +62,11 @@ public class MainActivity extends AppCompatActivity
         mDrawerItems=Stage_list;
         mDrawerlist.setAdapter(new ArrayAdapter<String>(this, R.layout.drawerlistitem, mDrawerItems));
         mDrawerlist.setOnItemClickListener(new DrawerItemClickListener());
+        frame = (FrameLayout) findViewById(R.id.container_frame);
+        fm.beginTransaction()
+                .replace(R.id.container_frame, new ViewpagerContainer())
+                .commit();
+
 
         toggle = new ActionBarDrawerToggle(
                 this, mDrawerlayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -76,6 +81,12 @@ public class MainActivity extends AppCompatActivity
                 super.onDrawerOpened(drawerview);
                 getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu();
+            }
+
+            public void onDrawerSlide(View drawerView, float slideOffset)
+            {
+                float moveFactor = (mDrawerlist.getWidth() * slideOffset);
+                frame.setTranslationX(moveFactor);
             }
         };
 

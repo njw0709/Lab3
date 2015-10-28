@@ -2,13 +2,17 @@ package com.example.jong.savangerhunt_1;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +31,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by root on 10/22/15.
  */
@@ -37,11 +46,12 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private Boolean mapReady = false;
-    private boolean hasarrived = false;
+    private boolean hasarrived = true;
     private int mProgressStatus = 0;
     private ProgressBar mProgress;
     private Handler mHandler = new Handler();
     private GPSTracker gps;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     public TabbedFragment_map() {
         // Required empty public constructor
     }
@@ -69,8 +79,16 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
         switch (button) {
             //TODO:button name change to small case
             case ("camera"): {
-                Button Camera = (Button) v.findViewById(R.id.Camera_button);
-                Camera.setEnabled(false);
+                Button camera = (Button) v.findViewById(R.id.Camera_button);
+                camera.setEnabled(hasarrived);
+                camera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        transitionToFragment(new Photoview());
+
+                    }
+                });
+
             }
         }
 
@@ -137,4 +155,11 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
             googleMap.moveCamera(CameraUpdateFactory.zoomTo(14));
         }
     }
+    public void transitionToFragment(Fragment fragment) {
+        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.container_frame, fragment);
+        transaction.commit();
+    }
+
 }

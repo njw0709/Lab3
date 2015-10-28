@@ -17,7 +17,6 @@
         android:layout_below="@id/stage_text"
         android:id="@+id/video_view"
         android:layout_marginTop="@dimen/inbetween"
-        android:visibility="visible"
         />
 
     <ProgressBar
@@ -46,7 +45,6 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:enabled="false"
         android:layout_below="@id/Stage_status"
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
