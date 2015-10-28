@@ -21,6 +21,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Fragment Tabbedfrag;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     private String[] mDrawerItems;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
+//    final RequestQueue queue = Volley.newRequestQueue(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
