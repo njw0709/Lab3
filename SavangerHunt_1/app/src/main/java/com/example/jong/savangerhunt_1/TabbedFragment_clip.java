@@ -1,10 +1,13 @@
 package com.example.jong.savangerhunt_1;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +23,10 @@ import android.widget.VideoView;
 public class TabbedFragment_clip extends android.support.v4.app.Fragment {
 
     public static final String ARG_SECTION_NUMBER = "1";
-    public boolean hasarrived = false;
+    public boolean hasarrived = true;
     private int mProgressStatus = 0;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
     /**
      * proximity value
      **/
@@ -37,9 +42,11 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
             //TODO:button name change to small case
             case ("camera"): {
                 Button camera = (Button) v.findViewById(R.id.Camera_button);
+                camera.setEnabled(hasarrived);
                 camera.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        transitionToFragment(new Photoview());
 
                     }
                 });
@@ -112,4 +119,12 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         create_videoview(view);
         return view;
     }
+
+    public void transitionToFragment(Fragment fragment) {
+        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.container_frame, fragment);
+        transaction.commit();
+    }
+
 }

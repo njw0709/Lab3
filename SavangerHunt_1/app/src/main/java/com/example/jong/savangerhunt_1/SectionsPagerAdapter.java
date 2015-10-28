@@ -16,6 +16,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
+    @Override
+    public int getCount() {
+        return 2;
+    }
 
     @Override
     public android.support.v4.app.Fragment getItem(int position) {
@@ -39,10 +43,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-    @Override
-    public int getCount() {
-        return 2;
-    }
+
 
     public CharSequence getPageTitle(int position,Resources r) {
         Locale l = Locale.getDefault();

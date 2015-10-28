@@ -45,7 +45,6 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:enabled="false"
         android:layout_below="@id/Stage_status"
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
