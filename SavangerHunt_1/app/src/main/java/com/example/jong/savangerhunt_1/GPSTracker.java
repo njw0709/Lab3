@@ -48,76 +48,85 @@ public class GPSTracker extends Service implements LocationListener{
     protected LocationManager locationManager;
 
     public GPSTracker(Context context) {
+        Log.d("GPSTRACKER","GPSTracker constructed");
         this.mContext = context;
-        getLocation();
+        getInitialLocation();
+//        checkLocationPermissions();
     }
 
-    public Location getLocation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+    private Location checkLocationPermissions() {
+        Log.d("GPSTRACKER","getLocation called");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Log.d("GPSTRACKER","build version is good");
             //DO CHECK PERMISSION
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                getInitialLocation();
+            }
+        }
+        else {
+            Log.d("GPSTRACKER","build version not good");
+        }
+        return location;
+    }
 
-                try {
-                    locationManager = (LocationManager) mContext
-                            .getSystemService(LOCATION_SERVICE);
+    private Location getInitialLocation() {
+        try {
+            locationManager = (LocationManager) mContext
+                    .getSystemService(LOCATION_SERVICE);
 
-                    // getting GPS status
-                    isGPSEnabled = locationManager
-                            .isProviderEnabled(LocationManager.GPS_PROVIDER);
+            // getting GPS status
+            isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            Log.d("GPSTRACKER","isGPSEnabled? "+Boolean.toString(isGPSEnabled));
 
-                    // getting network status
-                    isNetworkEnabled = locationManager
-                            .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            // getting network status
+            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-                    if (!isGPSEnabled && !isNetworkEnabled) {
-                        // no network provider is enabled
-                    } else {
-                        this.canGetLocation = true;
-                        // First get location from Network Provider
-                        if (isNetworkEnabled) {
-                            locationManager.requestLocationUpdates(
-                                    LocationManager.NETWORK_PROVIDER,
-                                    MIN_TIME_BW_UPDATES,
-                                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                            Log.d("Network", "Network");
-                            if (locationManager != null) {
-                                location = locationManager
-                                        .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                                if (location != null) {
-                                    latitude = location.getLatitude();
-                                    longitude = location.getLongitude();
-                                }
-                            }
-                        }
-                        // if GPS Enabled get lat/long using GPS Services
-                        if (isGPSEnabled) {
-                            if (location == null) {
-                                locationManager.requestLocationUpdates(
-                                        LocationManager.GPS_PROVIDER,
-                                        MIN_TIME_BW_UPDATES,
-                                        MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                                Log.d("GPS Enabled", "GPS Enabled");
-                                if (locationManager != null) {
-                                    location = locationManager
-                                            .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                    if (location != null) {
-                                        latitude = location.getLatitude();
-                                        longitude = location.getLongitude();
-                                    }
-                                }
-
-                            }
+            if (!isGPSEnabled && !isNetworkEnabled) {
+                // no network provider is enabled
+                Log.d("GPSTRACKER","no network enabled");
+            }
+            else {
+                this.canGetLocation = true;
+                // If GPS is Enabled get lat/long using GPS Services
+                if (isGPSEnabled && location == null) {
+                    Log.d("GPSTRACKER", "trying to get location from gps");
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    if (locationManager != null) {
+                        Log.d("GPSTRACKER","location manager not null");
+                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        Log.d("GPSTRACKER","location gotten from location manager");
+                        if (location != null) {
+                            Log.d("GPSTRACKER","location not null");
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
                         }
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-
-
-
+                // If not, get location from Network Provider
+                if (isNetworkEnabled && location == null) {
+                    Log.d("GPSTRACKER", "trying to get location from network");
+                    locationManager.requestLocationUpdates(
+                            LocationManager.NETWORK_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    if (locationManager != null) {
+                        location = locationManager
+                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if (location != null) {
+                            Log.d("GPSTRACKER","location not null from network");
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                        }
+                    }
+                }
             }
+
+        } catch (SecurityException e) {
+            Log.d("GPSTRACKER","User did not allow us to access location");
         }
         return location;
     }
@@ -188,6 +197,7 @@ public class GPSTracker extends Service implements LocationListener{
     }
     @Override
     public void onLocationChanged(Location loc) {
+        Log.d("GPSTRACKER","onLocationChanged was called");
         location = loc;
 
     }
