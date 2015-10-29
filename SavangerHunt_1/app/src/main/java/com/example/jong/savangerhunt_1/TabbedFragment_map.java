@@ -61,13 +61,15 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.maplayout, container, false);
-        create_button(v,"camera");
+        create_button(v, "camera");
         create_progressbar(v);
 
         mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                 .addConnectionCallbacks(this)
                 .addApi(LocationServices.API)
                 .build();
+
+        gps = new GPSTracker(getActivity(), this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -147,14 +149,28 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
     }
     private void updateMapWithLocation() {
         if (mapReady) {
-            LatLng locLL = new LatLng(42.29,-71.26);
+            LatLng locLL = new LatLng(gps.getLatitude(), gps.getLongitude());
+//            LatLng locLL = new LatLng(42.29,-71.26);
+            googleMap.clear();
             googleMap.addMarker(new MarkerOptions()
                     .position(locLL)
                     .title("Your current location"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(locLL));
-            googleMap.moveCamera(CameraUpdateFactory.zoomTo(14));
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(19));
         }
     }
+
+    public void locationChanged() {
+        // Called from GPSTracker when the location changes
+        updateMapWithLocation();
+        // TODO Update progress bar
+        // TODO Check if we have arrived
+    }
+
+    private void updateProgressBar(float percentFilled) {
+        // TODO implement this
+    }
+
     public void transitionToFragment(Fragment fragment) {
         android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();

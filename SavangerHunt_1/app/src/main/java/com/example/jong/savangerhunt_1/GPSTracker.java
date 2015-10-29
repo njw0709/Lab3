@@ -47,9 +47,13 @@ public class GPSTracker extends Service implements LocationListener{
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
-    public GPSTracker(Context context) {
+    // MapFragment
+    private TabbedFragment_map mapFragment;
+
+    public GPSTracker(Context context, TabbedFragment_map mapFrag) {
         Log.d("GPSTRACKER","GPSTracker constructed");
         this.mContext = context;
+        mapFragment = mapFrag;
         getInitialLocation();
 //        checkLocationPermissions();
     }
@@ -199,7 +203,7 @@ public class GPSTracker extends Service implements LocationListener{
     public void onLocationChanged(Location loc) {
         Log.d("GPSTRACKER","onLocationChanged was called");
         location = loc;
-
+        mapFragment.locationChanged();
     }
 
     @Override
