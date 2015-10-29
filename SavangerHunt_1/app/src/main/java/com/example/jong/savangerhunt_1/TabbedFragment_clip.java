@@ -123,6 +123,7 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
     public void transitionToFragment(Fragment fragment) {
         android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
+        transaction.addToBackStack(null);
         transaction.replace(R.id.container_frame, fragment);
         transaction.commit();
     }

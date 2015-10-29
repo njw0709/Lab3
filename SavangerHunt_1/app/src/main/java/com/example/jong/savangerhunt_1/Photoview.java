@@ -46,13 +46,19 @@ public class Photoview extends android.support.v4.app.Fragment {
     }
 
     public void createImageview(View v){
-        Bundle bundle = this.getArguments();
-        String uriString = bundle.getString("uri", null);
-        Log.d("create_imageview", uriString);
-        uri = Uri.parse(uriString);
-        imgView = (ImageView)v.findViewById(R.id.imageView);
-        imgView.setImageURI(uri);
-        imgView.setRotation(90);
+//        Bundle bundle = this.getArguments();
+//        String uriString = bundle.getString("uri", null);
+//        Log.d("create_imageview", uriString);
+//        uri = Uri.parse(uriString);
+        uri=null;
+        imgView = (ImageView) v.findViewById(R.id.imageview);
+        if(uri==null){
+            imgView.setImageResource(R.drawable.ic_cam);
+        }
+        else{
+            imgView.setImageURI(uri);
+            imgView.setRotation(90);
+        }
     }
 
     public void createbutton(View v, String button){
@@ -73,6 +79,15 @@ public class Photoview extends android.support.v4.app.Fragment {
                     public void onClick(View v) {
                         dispatchTakePictureIntent();
 
+                    }
+                });
+            }
+            case("Cancel"):{
+                Button cancel = (Button) v.findViewById(R.id.cancelbutton);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        transitionToFragment(new ViewpagerContainer());
                     }
                 });
             }
