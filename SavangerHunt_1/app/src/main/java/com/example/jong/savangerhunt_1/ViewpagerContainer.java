@@ -38,6 +38,9 @@ public class ViewpagerContainer extends Fragment {
         return v;
     }
 
+    public Fragment getviewpagerfragment(int page){
+        return mSectionsPagerAdapter.getActiveFragment(getChildFragmentManager(),mViewPager,page);
+    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

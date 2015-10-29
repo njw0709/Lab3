@@ -19,14 +19,16 @@ import org.json.JSONObject;
 
 public class S3service {
     private JSONArray pathJSON;
+    private RequestQueue queue;
+
 
     // Constructor
     public S3service(Context context) {
 
         // Instantiate the RequestQueue
-        final RequestQueue queue = Volley.newRequestQueue(context);
+        queue = Volley.newRequestQueue(context);
+        String url = "http://45.55.65.113/scavangerhunt";
 
-        String url = "http://45.55.65.113/scavengerhunt";
         // Request a JSON response from the url
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

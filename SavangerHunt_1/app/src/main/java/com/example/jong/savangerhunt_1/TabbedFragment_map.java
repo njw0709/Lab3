@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -51,7 +52,10 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
     private ProgressBar mProgress;
     private Handler mHandler = new Handler();
     private GPSTracker gps;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private StageData stageData = new StageData(this.getActivity());
+
+
+    private TextView textview;
     public TabbedFragment_map() {
         // Required empty public constructor
     }
@@ -61,9 +65,10 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.maplayout, container, false);
-        create_button(v,"camera");
+        create_button(v, "camera");
         create_progressbar(v);
-
+        textview = (TextView) v.findViewById(R.id.stage_text);
+        textview.setText("    Stage # ".concat(String.valueOf(stageData.getVisiblestage())));
         mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                 .addConnectionCallbacks(this)
                 .addApi(LocationServices.API)
@@ -160,6 +165,10 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
         android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.container_frame, fragment);
         transaction.commit();
+    }
+
+    public void updatemapview(int stage){
+        textview.setText("    Stage # ".concat(String.valueOf(stage)));
     }
 
 }

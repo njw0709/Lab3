@@ -153,7 +153,12 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //implement what happens when item is clicked
+            stageData.changevisiblestage(position+1);
+            ViewpagerContainer container=(ViewpagerContainer) getSupportFragmentManager().findFragmentById(R.id.container_frame);
+            TabbedFragment_clip clip= (TabbedFragment_clip) container.getviewpagerfragment(0);
+            TabbedFragment_map map = (TabbedFragment_map) container.getviewpagerfragment(1);
+            clip.updateclipview(position+1);
+            map.updatemapview(position+1);
 
         }
     }

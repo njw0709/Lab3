@@ -30,12 +30,15 @@ public class Photoview extends android.support.v4.app.Fragment {
     private String TAG = "PhotoView";
     private Uri fileUri;
     private ImageView imgView;
+    private Button ok;
+    private Button retake;
+    private Button cancel;
     static final int REQUEST_TAKE_PHOTO = 1;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private String mCurrentPhotoPath;
     private int currstage;
     private static String root = null;
     private static String imageFolderPath=null;
+    StageData stageData = new StageData(getActivity());
+
     public Photoview() {
         // Required empty public constructor
     }
@@ -56,7 +59,7 @@ public class Photoview extends android.support.v4.app.Fragment {
 //        String uriString = bundle.getString("uri", null);
 //        Log.d("create_imageview", uriString);
 //        uri = Uri.parse(uriString);
-        fileUri=null;
+        fileUri=null;//from StageData
         imgView = (ImageView) v.findViewById(R.id.imageview);
         if(fileUri==null){
             imgView.setImageResource(R.drawable.ic_cam);
@@ -78,16 +81,28 @@ public class Photoview extends android.support.v4.app.Fragment {
     public void createbutton(View v, String button){
         switch (button) {
             case("Ok"): {
-                Button ok = (Button) v.findViewById(R.id.okbutton);
+                ok = (Button) v.findViewById(R.id.okbutton);
+                if (fileUri==null){
+                    ok.setEnabled(false);
+                }
+                else{
+                    ok.setEnabled(true);
+                }
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        stageData.finishedcurrstage();
+                        stageData.setImageURIs(fileUri.toString());
+                        stageData.changevisiblestage(currstage + 1);
                         transitionToFragment(new ViewpagerContainer());
                     }
                 });
             }
             case("Retake"):{
-                Button retake = (Button) v.findViewById(R.id.retakebutton);
+                retake = (Button) v.findViewById(R.id.retakebutton);
+                if(fileUri==null){
+                    retake.setText("Take Photo");
+                }
                 retake.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -97,7 +112,7 @@ public class Photoview extends android.support.v4.app.Fragment {
                 });
             }
             case("Cancel"):{
-                Button cancel = (Button) v.findViewById(R.id.cancelbutton);
+                cancel = (Button) v.findViewById(R.id.cancelbutton);
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -158,6 +173,7 @@ public class Photoview extends android.support.v4.app.Fragment {
                         e1.printStackTrace();
                     }
                     imgView.setImageBitmap(bitmap);
+                    ok.setEnabled(true);
                     break;
                 default:
                     Toast.makeText(getActivity(), "Something went wrong...", Toast.LENGTH_SHORT).show();

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,66 +27,14 @@ import org.w3c.dom.Text;
 public class TabbedFragment_clip extends android.support.v4.app.Fragment {
 
     public static final String ARG_SECTION_NUMBER = "1";
-    public boolean hasarrived = true;
-    private int mProgressStatus = 0;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-
-    /**
-     * proximity value
-     **/
-    private ProgressBar mProgress;
-    private Handler mHandler = new Handler();
+    private StageData stageData = new StageData(this.getActivity());
     private VideoView mVideoView;
     private TextView textview;
+    private TextView stageprogress;
+    private ImageView imageView;
 
 
     public TabbedFragment_clip() {
-    }
-
-    public void create_button(View v, String button) {
-        switch (button) {
-            //TODO:button name change to small case
-            case ("camera"): {
-                Button camera = (Button) v.findViewById(R.id.Camera_button);
-                camera.setEnabled(hasarrived);
-                camera.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        transitionToFragment(new Photoview());
-
-                    }
-                });
-            }
-        }
-
-    }
-
-    public int doWork() {
-        int proximity = 0;
-        while (proximity <= 1000000) {
-            proximity++;
-            return (int) proximity;
-        }
-        return 100;
-    }
-
-    public void create_progressbar(View v) {
-        mProgress = (ProgressBar) v.findViewById(R.id.progressbar);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (mProgressStatus < 100) {
-                    mProgressStatus = doWork();
-
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mProgress.setProgress(mProgressStatus);
-                        }
-                    });
-                }
-            }
-        });
     }
 
     public void create_videoview(View v) {
@@ -100,6 +49,7 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         MediaController mediaControls = new MediaController(getContext());
         mVideoView = (VideoView) v.findViewById(R.id.video_view);
         mVideoView.setMediaController(mediaControls);
+        //TODO:setvideourlwith stagedata
         String s3url = "https://s3.amazonaws.com/olin-mobile-proto/MVI_3140.3gp";
         mVideoView.setVideoURI(Uri.parse(s3url));
         mVideoView.requestFocus();
@@ -119,10 +69,17 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.cliplayout, container, false);
-        create_button(view, "Camera");
-        create_progressbar(view);
         create_videoview(view);
         textview = (TextView) view.findViewById(R.id.stage_text);
+        textview.setText("    Stage # ".concat(String.valueOf(stageData.getVisiblestage())));
+        stageprogress = (TextView) view.findViewById(R.id.Stage_status);
+        imageView = (ImageView) view.findViewById(R.id.completed_image);
+        if(stageData.getCurrstage()>stageData.getVisiblestage()){
+            stageprogress.setVisibility(View.GONE);
+        }
+        else if(stageData.getCurrstage()==stageData.getVisiblestage()){
+            imageView.setVisibility(View.GONE);
+        }
         return view;
     }
 
@@ -133,9 +90,16 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         transaction.replace(R.id.container_frame, fragment);
         transaction.commit();
     }
-    public void updateclipview(String newvideourl, int stage){
+    public void updateclipview(int stage){
+//        String newvideourl = stageData.getVideoURI(stage);
 //        mVideoView.setVideoURI(Uri.parse(newvideourl));
         textview.setText("    Stage # ".concat(String.valueOf(stage)));
+        if(stageData.getCurrstage()>stageData.getVisiblestage()){;
+            stageprogress.setVisibility(View.GONE);
+        }
+        else if(stageData.getCurrstage()==stageData.getVisiblestage()){
+            imageView.setVisibility(View.GONE);
+        }
     }
 
 }

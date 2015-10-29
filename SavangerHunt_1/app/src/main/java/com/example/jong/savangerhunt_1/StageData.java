@@ -8,15 +8,13 @@ import java.util.ArrayList;
  * Created by root on 10/27/15.
  */
 public class StageData {
-    public static int currstage=10;
+    public static int currstage=1;
     public static int visiblestage=1;
     public static ArrayList<String> ImageURIs;
     private S3service s3service;
-    private Context context;
 
     public StageData(Context context){
-        this.context=context;
-        this.s3service=new S3service(context);
+//        this.s3service=new S3service(context);
     }
 
     public int getCurrstage(){
@@ -31,7 +29,7 @@ public class StageData {
         return visiblestage;
     }
     public int changevisiblestage(int stage){
-        visiblestage++;
+        visiblestage=stage;
         return this.getVisiblestage();
     }
     public void setImageURIs(String imageuri){
