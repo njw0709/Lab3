@@ -1,6 +1,8 @@
 package com.example.jong.savangerhunt_1;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,8 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,7 +28,7 @@ import java.util.Date;
 public class Photoview extends android.support.v4.app.Fragment {
 
     private String TAG = "PhotoView";
-    private Uri uri;
+    private Uri fileUri;
     private ImageView imgView;
     static final int REQUEST_TAKE_PHOTO = 1;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -52,14 +56,22 @@ public class Photoview extends android.support.v4.app.Fragment {
 //        String uriString = bundle.getString("uri", null);
 //        Log.d("create_imageview", uriString);
 //        uri = Uri.parse(uriString);
-        uri=null;
+        fileUri=null;
         imgView = (ImageView) v.findViewById(R.id.imageview);
-        if(uri==null){
+        if(fileUri==null){
             imgView.setImageResource(R.drawable.ic_cam);
         }
         else{
-            imgView.setImageURI(uri);
-            imgView.setRotation(90);
+            Bitmap bitmap;
+            try {
+                GetImageThumbnail getImageThumbnail = new GetImageThumbnail();
+                bitmap = getImageThumbnail.getThumbnail(fileUri, getActivity());
+                imgView.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -79,7 +91,7 @@ public class Photoview extends android.support.v4.app.Fragment {
                 retake.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dispatchTakePictureIntent();
+                        captureImage();
 
                     }
                 });
@@ -95,11 +107,8 @@ public class Photoview extends android.support.v4.app.Fragment {
             }
         }
     }
-    public void captureImage(View view,int currstage){
+    public void captureImage(){
         String imageName;
-        Uri fileUri;
-        ImageView imageView = (ImageView) view.findViewById(R.id.imageview);
-
         // fetching the root directory
         root = Environment.getExternalStorageDirectory().toString()
                 + "/Scavangerhunt";
@@ -131,9 +140,32 @@ public class Photoview extends android.support.v4.app.Fragment {
         }
     }
     @Override
-    protected void onActivityResult(int requestcode, int resultcode, )
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == Activity.RESULT_OK) {
 
+            switch (requestCode) {
+                case REQUEST_TAKE_PHOTO:
+
+                    Bitmap bitmap = null;
+                    try {
+                        GetImageThumbnail getImageThumbnail = new GetImageThumbnail();
+                        bitmap = getImageThumbnail.getThumbnail(fileUri, getActivity());
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    imgView.setImageBitmap(bitmap);
+                    break;
+                default:
+                    Toast.makeText(getActivity(), "Something went wrong...", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+
+        }
+    }
 
     public void transitionToFragment(Fragment fragment) {
         android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -141,6 +173,4 @@ public class Photoview extends android.support.v4.app.Fragment {
         transaction.replace(R.id.container_frame, fragment);
         transaction.commit();
     }
-
-
 }
