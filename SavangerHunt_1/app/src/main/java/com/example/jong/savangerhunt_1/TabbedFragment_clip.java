@@ -15,7 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.VideoView;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by root on 10/22/15.
@@ -32,6 +35,8 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
      **/
     private ProgressBar mProgress;
     private Handler mHandler = new Handler();
+    private VideoView mVideoView;
+    private TextView textview;
 
 
     public TabbedFragment_clip() {
@@ -84,7 +89,6 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
     }
 
     public void create_videoview(View v) {
-        final VideoView mVideoView;
         final int videopos = 0;
         final ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(getContext());
@@ -99,7 +103,6 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         String s3url = "https://s3.amazonaws.com/olin-mobile-proto/MVI_3140.3gp";
         mVideoView.setVideoURI(Uri.parse(s3url));
         mVideoView.requestFocus();
-        mVideoView.setZOrderOnTop(true);
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -109,6 +112,8 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         });
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -117,6 +122,7 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         create_button(view, "Camera");
         create_progressbar(view);
         create_videoview(view);
+        textview = (TextView) view.findViewById(R.id.stage_text);
         return view;
     }
 
@@ -126,6 +132,10 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         transaction.addToBackStack(null);
         transaction.replace(R.id.container_frame, fragment);
         transaction.commit();
+    }
+    public void updateclipview(String newvideourl, int stage){
+//        mVideoView.setVideoURI(Uri.parse(newvideourl));
+        textview.setText("    Stage # ".concat(String.valueOf(stage)));
     }
 
 }

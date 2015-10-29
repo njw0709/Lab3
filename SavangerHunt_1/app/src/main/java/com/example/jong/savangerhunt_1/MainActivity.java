@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,12 +23,9 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private int stage;
+    private int currstage;
     private DrawerLayout mDrawerlayout;
     private ListView mDrawerlist;
     private ActionBarDrawerToggle toggle;
@@ -37,11 +35,13 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager fm;
     private FragmentTransaction ft;
     private FrameLayout frame;
+    private StageData stageData;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        stageData=new StageData(this);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -49,16 +49,16 @@ public class MainActivity extends AppCompatActivity
 
 
         //TODO:rename the variable
-        stage = 2;
-        String[] Stage_list= new String[stage];
-        for (int i=1; i<stage; i++) {
-            Stage_list[i] = "Stage ".concat(Integer.toString(i));
+        currstage = stageData.getCurrstage();
+        String[] Stage_list= new String[currstage];
+        for (int i=0; i<currstage; i++) {
+            Stage_list[i] = "Stage ".concat(Integer.toString(i+1));
         }
 
 
         mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerTitle=mTitle=getTitle();
-        mDrawerlist = (ListView)  findViewById(R.id.nav_listview);
+        mDrawerlist = (ListView) findViewById(R.id.nav_listview);
         mDrawerItems=Stage_list;
         mDrawerlist.setAdapter(new ArrayAdapter<String>(this, R.layout.drawerlistitem, mDrawerItems));
         mDrawerlist.setOnItemClickListener(new DrawerItemClickListener());
@@ -80,6 +80,8 @@ public class MainActivity extends AppCompatActivity
             public void onDrawerOpened(View drawerview){
                 super.onDrawerOpened(drawerview);
                 getSupportActionBar().setTitle(mDrawerTitle);
+                mDrawerlayout.bringChildToFront(drawerview);
+                mDrawerlayout.requestLayout();
                 invalidateOptionsMenu();
             }
 
@@ -142,21 +144,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-//
-//        if (id == R.id.nav_camara) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -167,6 +154,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //implement what happens when item is clicked
+
         }
     }
 }

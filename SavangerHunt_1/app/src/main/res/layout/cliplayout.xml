@@ -6,7 +6,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/stage_text"
-        android:text="    Stage #"
         android:textSize="25dp"
         android:paddingTop="@dimen/start_frag"
         />
