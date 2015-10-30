@@ -75,6 +75,8 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
                 .addApi(LocationServices.API)
                 .build();
 
+        gps = new GPSTracker(getActivity(), this);
+
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         return v;
@@ -153,14 +155,28 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
     }
     private void updateMapWithLocation() {
         if (mapReady) {
-            LatLng locLL = new LatLng(42.29,-71.26);
+            LatLng locLL = new LatLng(gps.getLatitude(), gps.getLongitude());
+//            LatLng locLL = new LatLng(42.29,-71.26);
+            googleMap.clear();
             googleMap.addMarker(new MarkerOptions()
                     .position(locLL)
                     .title("Your current location"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(locLL));
-            googleMap.moveCamera(CameraUpdateFactory.zoomTo(14));
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(19));
         }
     }
+
+    public void locationChanged() {
+        // Called from GPSTracker when the location changes
+        updateMapWithLocation();
+        // TODO Update progress bar
+        // TODO Check if we have arrived
+    }
+
+    private void updateProgressBar(float percentFilled) {
+        // TODO implement this
+    }
+
     public void transitionToFragment(Fragment fragment) {
         android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
