@@ -27,7 +27,7 @@ import org.w3c.dom.Text;
 public class TabbedFragment_clip extends android.support.v4.app.Fragment {
 
     public static final String ARG_SECTION_NUMBER = "1";
-    private StageData stageData = new StageData(this.getActivity());
+    private StageData stageData;
     private VideoView mVideoView;
     private TextView textview;
     private TextView stageprogress;
@@ -70,6 +70,7 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.cliplayout, container, false);
         create_videoview(view);
+        stageData= new StageData(this.getActivity());
         textview = (TextView) view.findViewById(R.id.stage_text);
         textview.setText("    Stage # ".concat(String.valueOf(stageData.getVisiblestage())));
         stageprogress = (TextView) view.findViewById(R.id.Stage_status);

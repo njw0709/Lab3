@@ -14,7 +14,7 @@ public class StageData {
     private S3service s3service;
 
     public StageData(Context context){
-//        this.s3service=new S3service(context);
+        this.s3service=new S3service(context);
     }
 
     public int getCurrstage(){

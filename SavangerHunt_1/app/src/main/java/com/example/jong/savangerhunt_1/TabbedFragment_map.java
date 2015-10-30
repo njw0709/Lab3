@@ -52,7 +52,7 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
     private ProgressBar mProgress;
     private Handler mHandler = new Handler();
     private GPSTracker gps;
-    private StageData stageData = new StageData(this.getActivity());
+    private StageData stageData;
 
 
     private TextView textview;
@@ -67,6 +67,7 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
         View v = inflater.inflate(R.layout.maplayout, container, false);
         create_button(v, "camera");
         create_progressbar(v);
+        stageData= new StageData(this.getActivity());
         textview = (TextView) v.findViewById(R.id.stage_text);
         textview.setText("    Stage # ".concat(String.valueOf(stageData.getVisiblestage())));
         mGoogleApiClient = new GoogleApiClient.Builder(getContext())
