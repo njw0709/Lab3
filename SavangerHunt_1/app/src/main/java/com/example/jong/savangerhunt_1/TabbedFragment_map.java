@@ -169,13 +169,20 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
     public void locationChanged() {
         // Called from GPSTracker when the location changes
         updateMapWithLocation();
-        // TODO Update progress bar
-        // TODO Check if we have arrived
+        checkArrival();
     }
 
-    private void updateProgressBar(float percentFilled) {
-        // TODO implement this
+    private void checkArrival() {
+        double currLat = gps.getLatitude();
+        double currLong = gps.getLongitude();
+        String[] destLoc = stageData.getStageLocation(stageData.getCurrstage());
+        double destLat = Double.parseDouble(destLoc[0]);
+        double destLong = Double.parseDouble(destLoc[1]);
+        if (Math.abs(destLat - currLat) < 0.001 && Math.abs(destLong - currLong) < 0.001) {
+            // We are close enough to our destination to count it as arrived
+        }
     }
+
 
     public void transitionToFragment(Fragment fragment) {
         android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
