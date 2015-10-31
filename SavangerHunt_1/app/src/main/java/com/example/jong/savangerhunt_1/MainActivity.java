@@ -33,9 +33,7 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String[] mDrawerItems;
     private FragmentManager fm;
-    private FragmentTransaction ft;
     private FrameLayout frame;
     private StageData stageData;
     private ArrayList<String> Stage_list;
@@ -162,7 +160,6 @@ public class MainActivity extends AppCompatActivity
             TabbedFragment_map map = (TabbedFragment_map) container.getviewpagerfragment(1);
             clip.updateclipview(position+1);
             map.updatemapview(position+1);
-
         }
     }
     @Override

@@ -1,41 +1,24 @@
 package com.example.jong.savangerhunt_1;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by root on 10/22/15.
@@ -47,12 +30,10 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private Boolean mapReady = false;
-    private boolean hasarrived = true;
-    private int mProgressStatus = 0;
-    private ProgressBar mProgress;
-    private Handler mHandler = new Handler();
+    private boolean hasarrived = false;
     private GPSTracker gps;
     private StageData stageData;
+    private Button camera;
 
 
     private TextView textview;
@@ -66,7 +47,6 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.maplayout, container, false);
         create_button(v, "camera");
-        create_progressbar(v);
         stageData= new StageData(this.getActivity());
         textview = (TextView) v.findViewById(R.id.stage_text);
         textview.setText("    Stage # ".concat(String.valueOf(stageData.getVisiblestage())));
@@ -87,7 +67,7 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
         switch (button) {
             //TODO:button name change to small case
             case ("camera"): {
-                Button camera = (Button) v.findViewById(R.id.Camera_button);
+                camera = (Button) v.findViewById(R.id.Camera_button);
                 camera.setEnabled(hasarrived);
                 camera.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -101,42 +81,13 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
     }
 
 
-    public void create_progressbar(View v) {
-        mProgress = (ProgressBar) v.findViewById(R.id.progressbar);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (mProgressStatus < 100) {
-                    mProgressStatus = doWork();
-
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mProgress.setProgress(mProgressStatus);
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    public int doWork() {
-        int proximity = 0;
-        while (proximity <= 1000000) {
-            proximity++;
-            return (int) proximity;
-        }
-        return 100;
-    }
-
     @Override
     public void onConnected(Bundle bundle) {
         Log.d("ONCONNECTED","this was called");
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
-//            mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-//            mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+
         }
     }
 
@@ -154,7 +105,6 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
     private void updateMapWithLocation() {
         if (mapReady) {
             LatLng locLL = new LatLng(gps.getLatitude(), gps.getLongitude());
-//            LatLng locLL = new LatLng(42.29,-71.26);
             googleMap.clear();
             googleMap.addMarker(new MarkerOptions()
                     .position(locLL)
@@ -178,6 +128,12 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
         double destLong = Double.parseDouble(destLoc[1]);
         if (Math.abs(destLat - currLat) < 0.001 && Math.abs(destLong - currLong) < 0.001) {
             // We are close enough to our destination to count it as arrived
+            hasarrived=true;
+            camera.setEnabled(hasarrived);
+        }
+        else{
+            hasarrived=false;
+            camera.setEnabled(hasarrived);
         }
     }
 

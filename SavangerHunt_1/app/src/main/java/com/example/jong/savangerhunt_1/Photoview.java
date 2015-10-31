@@ -39,6 +39,7 @@ public class Photoview extends android.support.v4.app.Fragment {
     private static String imageFolderPath=null;
     private StageData stageData;
     private notifystagefinished finishedstage;
+    private int finalstage =6;
 
     public Photoview() {
         // Required empty public constructor
@@ -103,10 +104,15 @@ public class Photoview extends android.support.v4.app.Fragment {
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        stageData.finishedcurrstage();
-                        stageData.setImageURIs(fileUri.toString());
-                        finishedstage.updatemainview(stageData.getCurrstage());
-                        transitionToFragment(new ViewpagerContainer());
+                        if(stageData.getCurrstage()==finalstage){
+                            transitionToFragment(new Finished_frag());
+                        }
+                        else {
+                            stageData.finishedcurrstage();
+                            stageData.setImageURIs(fileUri.toString());
+                            finishedstage.updatemainview(stageData.getCurrstage());
+                            transitionToFragment(new ViewpagerContainer());
+                        }
                     }
                 });
             }

@@ -1,21 +1,16 @@
 package com.example.jong.savangerhunt_1;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
+import android.app.ProgressDialog;;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
+import android.os.Bundle;;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -75,12 +70,6 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         textview.setText("    Stage # ".concat(String.valueOf(stageData.getVisiblestage())));
         stageprogress = (TextView) view.findViewById(R.id.Stage_status);
         imageView = (ImageView) view.findViewById(R.id.completed_image);
-        if(stageData.getCurrstage()>stageData.getVisiblestage()){
-            stageprogress.setVisibility(View.GONE);
-        }
-        else if(stageData.getCurrstage()==stageData.getVisiblestage()){
-            imageView.setVisibility(View.GONE);
-        }
         return view;
     }
 
@@ -93,14 +82,10 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
     }
     public void updateclipview(int stage){
         String newvideourl = stageData.getVideoURI(stage);
+        String completedimg=stageData.getImageURI(stage);
+        imageView.setImageURI(Uri.parse(completedimg));
         mVideoView.setVideoURI(Uri.parse(newvideourl));
         textview.setText("    Stage # ".concat(String.valueOf(stage)));
-        if(stageData.getCurrstage()>stageData.getVisiblestage()){;
-            stageprogress.setVisibility(View.GONE);
-        }
-        else if(stageData.getCurrstage()==stageData.getVisiblestage()){
-            imageView.setVisibility(View.GONE);
-        }
     }
 
 }
