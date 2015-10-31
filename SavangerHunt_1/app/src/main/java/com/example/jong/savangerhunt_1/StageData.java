@@ -1,6 +1,7 @@
 package com.example.jong.savangerhunt_1;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -10,19 +11,21 @@ import java.util.ArrayList;
 public class StageData {
     public static int currstage=1;
     public static int visiblestage=1;
-    public static ArrayList<String> ImageURIs;
-    private S3service s3service;
+    public static ArrayList<String> ImageURIs=new ArrayList<String>();
+    S3service s3service;
 
     public StageData(Context context){
         this.s3service=new S3service(context);
     }
 
     public int getCurrstage(){
+        Log.d("currentstage",String.valueOf(currstage));
         return currstage;
     }
 
     public void finishedcurrstage(){
         currstage++;
+        visiblestage++;
     }
 
     public int getVisiblestage(){
@@ -36,7 +39,12 @@ public class StageData {
         ImageURIs.add(imageuri);
     }
     public String getImageURI(int stage){
-        return ImageURIs.get(stage);
+        if(ImageURIs.size()<stage){
+            return "nothing";
+        }
+        else{
+            return ImageURIs.get(stage-1);
+        }
     }
     public String getVideoURI(int stage){
         String videouri=s3service.getVideoURLForStage(stage);

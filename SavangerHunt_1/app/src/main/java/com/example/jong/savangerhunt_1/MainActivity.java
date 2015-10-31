@@ -23,8 +23,10 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,notifystagefinished {
     private int currstage;
     private DrawerLayout mDrawerlayout;
     private ListView mDrawerlist;
@@ -36,7 +38,8 @@ public class MainActivity extends AppCompatActivity
     private FragmentTransaction ft;
     private FrameLayout frame;
     private StageData stageData;
-
+    private ArrayList<String> Stage_list;
+    private ArrayAdapter<String> mArrayadapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +53,17 @@ public class MainActivity extends AppCompatActivity
 
         //TODO:rename the variable
         currstage = stageData.getCurrstage();
-        String[] Stage_list= new String[currstage];
+        Stage_list= new ArrayList<String>();
         for (int i=0; i<currstage; i++) {
-            Stage_list[i] = "Stage ".concat(Integer.toString(i+1));
+            Stage_list.add("Stage ".concat(Integer.toString(i+1)));
         }
 
 
         mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerTitle=mTitle=getTitle();
         mDrawerlist = (ListView) findViewById(R.id.nav_listview);
-        mDrawerItems=Stage_list;
-        mDrawerlist.setAdapter(new ArrayAdapter<String>(this, R.layout.drawerlistitem, mDrawerItems));
+        mArrayadapter=new ArrayAdapter<String>(this, R.layout.drawerlistitem, Stage_list);
+        mDrawerlist.setAdapter(mArrayadapter);
         mDrawerlist.setOnItemClickListener(new DrawerItemClickListener());
         frame = (FrameLayout) findViewById(R.id.container_frame);
         fm.beginTransaction()
@@ -161,5 +164,11 @@ public class MainActivity extends AppCompatActivity
             map.updatemapview(position+1);
 
         }
+    }
+    @Override
+    public void updatemainview(int currstage){
+        Stage_list.add("Stage ".concat(Integer.toString(currstage)));
+        mArrayadapter.notifyDataSetChanged();
+
     }
 }

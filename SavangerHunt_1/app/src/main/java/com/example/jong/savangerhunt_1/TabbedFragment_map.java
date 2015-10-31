@@ -96,10 +96,8 @@ public class TabbedFragment_map extends android.support.v4.app.Fragment implemen
 
                     }
                 });
-
             }
         }
-
     }
 
 

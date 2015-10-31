@@ -37,7 +37,8 @@ public class Photoview extends android.support.v4.app.Fragment {
     private int currstage;
     private static String root = null;
     private static String imageFolderPath=null;
-    StageData stageData = new StageData(getActivity());
+    private StageData stageData;
+    private notifystagefinished finishedstage;
 
     public Photoview() {
         // Required empty public constructor
@@ -47,20 +48,31 @@ public class Photoview extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        stageData=new StageData(this.getActivity());
         View view = inflater.inflate(R.layout.photoview, container, false);
         createImageview(view);
         createbutton(view, "Ok");
         createbutton(view, "Retake");
         return view;
     }
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if (activity instanceof notifystagefinished){
+            finishedstage=(notifystagefinished)activity;
+        }
+
+    }
 
     public void createImageview(View v){
-//        Bundle bundle = this.getArguments();
-//        String uriString = bundle.getString("uri", null);
-//        Log.d("create_imageview", uriString);
-//        uri = Uri.parse(uriString);
-        fileUri=null;//from StageData
+        if(stageData.getImageURI(stageData.getVisiblestage())=="nothing"){
+            fileUri=null;
+        }
+        else{
+            fileUri=Uri.parse(stageData.getImageURI(stageData.getVisiblestage()));
+        }
         imgView = (ImageView) v.findViewById(R.id.imageview);
+
         if(fileUri==null){
             imgView.setImageResource(R.drawable.ic_cam);
         }
@@ -93,7 +105,7 @@ public class Photoview extends android.support.v4.app.Fragment {
                     public void onClick(View v) {
                         stageData.finishedcurrstage();
                         stageData.setImageURIs(fileUri.toString());
-                        stageData.changevisiblestage(currstage + 1);
+                        finishedstage.updatemainview(stageData.getCurrstage());
                         transitionToFragment(new ViewpagerContainer());
                     }
                 });

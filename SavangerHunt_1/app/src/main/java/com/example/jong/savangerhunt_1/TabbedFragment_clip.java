@@ -49,8 +49,8 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         MediaController mediaControls = new MediaController(getContext());
         mVideoView = (VideoView) v.findViewById(R.id.video_view);
         mVideoView.setMediaController(mediaControls);
-        //TODO:setvideourlwith stagedata
-        String s3url = "https://s3.amazonaws.com/olin-mobile-proto/MVI_3140.3gp";
+        Log.d("currentstage", String.valueOf(stageData.getCurrstage()));
+        String s3url = stageData.getVideoURI(stageData.getCurrstage());
         mVideoView.setVideoURI(Uri.parse(s3url));
         mVideoView.requestFocus();
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -69,8 +69,8 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.cliplayout, container, false);
-        create_videoview(view);
         stageData= new StageData(this.getActivity());
+        create_videoview(view);
         textview = (TextView) view.findViewById(R.id.stage_text);
         textview.setText("    Stage # ".concat(String.valueOf(stageData.getVisiblestage())));
         stageprogress = (TextView) view.findViewById(R.id.Stage_status);
@@ -92,8 +92,8 @@ public class TabbedFragment_clip extends android.support.v4.app.Fragment {
         transaction.commit();
     }
     public void updateclipview(int stage){
-//        String newvideourl = stageData.getVideoURI(stage);
-//        mVideoView.setVideoURI(Uri.parse(newvideourl));
+        String newvideourl = stageData.getVideoURI(stage);
+        mVideoView.setVideoURI(Uri.parse(newvideourl));
         textview.setText("    Stage # ".concat(String.valueOf(stage)));
         if(stageData.getCurrstage()>stageData.getVisiblestage()){;
             stageprogress.setVisibility(View.GONE);
